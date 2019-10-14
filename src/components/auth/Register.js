@@ -17,10 +17,28 @@ const Register = () => {
     username: "",
     email: "",
     password: "",
-    passwordconfirm: ""
+    passwordconfirm: "",
+    loading: false,
+    errors: []
   });
 
-  const { username, email, password, passwordconfirm } = state;
+  const { username, email, password, passwordconfirm, errors, loading } = state;
+
+  const errorSetter = error => {
+    setState({
+      ...state,
+      errors: [{ message: error }]
+    });
+  };
+
+  const displayErrors = errors =>
+    errors.map((error, i) => <p key={i}>{error.message}</p>);
+
+  const showInputErrorClass = (errors, inputName) => {
+    return errors.some(error => error.message.toLowerCase().includes(inputName))
+      ? "error"
+      : "";
+  };
 
   const handleOnChange = ({ target: { value, name } }) => {
     setState({
@@ -29,16 +47,55 @@ const Register = () => {
     });
   };
 
+  const isFormEmpty = ({ username, password, passwordconfirm, email }) => {
+    return Object.keys({ username, password, passwordconfirm, email }).every(
+      key => !!state[key]
+    );
+  };
+
+  const isPasswordValid = ({ password, passwordconfirm }) => {
+    if (password.length < 6 || passwordconfirm.length < 6) {
+      return false;
+    }
+    return password === passwordconfirm;
+  };
+
+  const isFormValid = () => {
+    if (!isFormEmpty(state)) {
+      errorSetter("Fill in all fields");
+      return false;
+    }
+
+    if (!isPasswordValid(state)) {
+      errorSetter("Password is invalid");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = event => {
     event.preventDefault();
+    if (isFormValid()) {
+      //clear errors and show preloader
+      setState({ ...state, errors: [], loading: true });
 
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(user => {
-        console.log(user);
-      })
-      .catch(error => console.error(error));
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(user => {
+          //stop loading
+          setState({ ...state, loading: false });
+          console.log(user);
+        })
+        .catch(error => {
+          const { message } = error;
+          setState({
+            ...state,
+            errors: [{ message }],
+            loading: false
+          });
+        });
+    }
   };
 
   return (
@@ -66,6 +123,7 @@ const Register = () => {
               value={email}
               name="email"
               icon="mail"
+              className={showInputErrorClass(errors, "email")}
               iconPosition="left"
               placeholder="Email Address"
               onChange={handleOnChange}
@@ -76,6 +134,7 @@ const Register = () => {
               value={password}
               name="password"
               icon="lock"
+              className={showInputErrorClass(errors, "password")}
               iconPosition="left"
               placeholder="Password"
               onChange={handleOnChange}
@@ -86,20 +145,33 @@ const Register = () => {
               value={passwordconfirm}
               name="passwordconfirm"
               icon="repeat"
+              className={showInputErrorClass(errors, "password")}
               iconPosition="left"
               placeholder="Confirm Password"
               onChange={handleOnChange}
             />
 
-            <Button type="submit" color="orange" fluid size="large">
+            <Button
+              disabled={loading}
+              className={loading ? "loading" : ""}
+              type="submit"
+              color="orange"
+              fluid
+              size="large"
+            >
               Sign Up
             </Button>
-
-            <Message>
-              Already A User? <Link to="login">Login</Link>
-            </Message>
           </Segment>
         </Form>
+        {errors.length > 0 && (
+          <Message error>
+            <h3>Error</h3>
+            {displayErrors(errors)}
+          </Message>
+        )}
+        <Message>
+          Already A User? <Link to="login">Login</Link>
+        </Message>
       </Grid.Column>
     </Grid>
   );
