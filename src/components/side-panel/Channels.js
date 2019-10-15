@@ -14,6 +14,31 @@ class Channels extends Component {
     modal: false
   };
 
+  componentDidMount() {
+    this.addListerners();
+  }
+
+  addListerners = () => {
+    let loadedChannels = [];
+    this.state.channelsRef.on("child_added", snapshot => {
+      loadedChannels.push(snapshot.val());
+      this.setState({ channels: loadedChannels });
+    });
+  };
+
+  displayChannels = channels =>
+    channels.length > 0 &&
+    channels.map(channel => (
+      <Menu.Item
+        key={channel.id}
+        onClick={() => console.log(channel)}
+        name={channel.name}
+        style={{ opacity: 0.7 }}
+      >
+        #{channel.name}
+      </Menu.Item>
+    ));
+
   onCloseModal = () => this.setState({ modal: false });
 
   openModal = () => this.setState({ modal: true });
@@ -77,6 +102,7 @@ class Channels extends Component {
             ({channels.length}) <Icon name="add" onClick={this.openModal} />
           </Menu.Item>
           {/*Channel List*/}
+          {this.displayChannels(channels)}
         </Menu.Menu>
 
         {/*Add Channel Modal*/}
