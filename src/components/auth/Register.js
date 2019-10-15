@@ -51,11 +51,10 @@ const Register = () => {
   const displayErrors = errors =>
     errors.map((error, i) => <p key={i}>{error.message}</p>);
 
-  const showInputErrorClass = (errors, inputName) => {
-    return errors.some(error => error.message.toLowerCase().includes(inputName))
+  const showInputErrorClass = (errors, inputName) =>
+    errors.some(error => error.message.toLowerCase().includes(inputName))
       ? "error"
       : "";
-  };
 
   const handleOnChange = ({ target: { value, name } }) => {
     setState({

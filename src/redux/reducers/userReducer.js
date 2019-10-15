@@ -8,6 +8,11 @@ export default (state = initialState.user, action) => {
         currentUser: action.payload.currentUser,
         isLoading: false
       };
+    case actionTypes.CLEAR_USER:
+      return {
+        ...initialState.user,
+        isLoading: false
+      };
     default:
       return state;
   }

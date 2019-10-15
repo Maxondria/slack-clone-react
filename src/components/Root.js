@@ -2,9 +2,9 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import firebase from "../firebase/firebase";
 import { connect } from "react-redux";
-import { setUser } from "../redux/actions";
-import Spinner from "../components/Spinner";
-import AppRoutes from "./AppRoutes";
+import { setUser, clearUser } from "../redux/actions";
+import Spinner from "./Spinner";
+import AppRoutes from "../routes/AppRoutes";
 
 class Root extends React.Component {
   componentDidMount() {
@@ -12,6 +12,9 @@ class Root extends React.Component {
       if (user) {
         this.props.setUser(user);
         this.props.history.push("/");
+      } else {
+        this.props.history.push("/login");
+        this.props.clearUser();
       }
     });
   }
@@ -28,7 +31,7 @@ const mapStateToProps = ({ user: { isLoading } }) => ({
 const AppRouterWithRouter = withRouter(
   connect(
     mapStateToProps,
-    { setUser }
+    { setUser, clearUser }
   )(Root)
 );
 
