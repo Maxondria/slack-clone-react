@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import firebase from "../../firebase/firebase";
+import { connect } from "react-redux";
 import { Icon, Menu, Modal, Form, Input, Button } from "semantic-ui-react";
 
 class Channels extends Component {
@@ -6,6 +8,7 @@ class Channels extends Component {
     channels: [],
     channelname: "",
     channeldetail: "",
+    channelsRef: firebase.database().ref("channels"),
     modal: false
   };
 
@@ -17,6 +20,41 @@ class Channels extends Component {
     this.setState({
       [name]: value
     });
+  };
+
+  isValidForm = ({ channelname, channeldetail }) =>
+    channeldetail && channelname;
+
+  handleSubmit = event => {
+    event.preventDefault();
+    if (this.isValidForm(this.state)) {
+      return this.saveChannel();
+    }
+  };
+
+  saveChannel = async () => {
+    const { channeldetail, channelname, channelsRef } = this.state;
+    const { displayName, photoURL } = this.props.currentUser;
+
+    try {
+      const id = channelsRef.push().key;
+
+      const newChannel = {
+        id,
+        name: channelname,
+        details: channeldetail,
+        createdBy: {
+          name: displayName,
+          avatar: photoURL
+        }
+      };
+
+      await channelsRef.child(id).update(newChannel);
+      this.setState({ channelname: "", channeldetail: "", modal: false });
+      console.log("channel Added");
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   render() {
@@ -38,7 +76,7 @@ class Channels extends Component {
         <Modal basic open={modal} onClose={this.onCloseModal}>
           <Modal.Header>Create a channel</Modal.Header>
           <Modal.Content>
-            <Form>
+            <Form onSubmit={this.handleSubmit}>
               <Form.Field>
                 <Input
                   fluid
@@ -60,7 +98,7 @@ class Channels extends Component {
           </Modal.Content>
 
           <Modal.Actions>
-            <Button color="green" inverted>
+            <Button color="green" inverted onClick={this.handleSubmit}>
               <Icon name="checkmark" /> Add
             </Button>
 
@@ -74,4 +112,8 @@ class Channels extends Component {
   }
 }
 
-export default Channels;
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+});
+
+export default connect(mapStateToProps)(Channels);

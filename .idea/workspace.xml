@@ -40,7 +40,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
+    <property name="settings.editor.selected.configurable" value="Errors" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -73,7 +73,7 @@
       <workItem from="1571059736628" duration="11428000" />
       <workItem from="1571126989883" duration="21212000" />
       <workItem from="1571163435343" duration="325000" />
-      <workItem from="1571163778103" duration="3950000" />
+      <workItem from="1571163778103" duration="5955000" />
     </task>
     <servers />
   </component>
