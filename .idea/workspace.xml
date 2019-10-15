@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb7b331e-92a9-4a7b-8e8e-3ec940b17162" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/ModalSpinner.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/side-panel/Channels.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/side-panel/Channels.js" afterDir="false" />
     </list>
@@ -73,7 +74,7 @@
       <workItem from="1571059736628" duration="11428000" />
       <workItem from="1571126989883" duration="21212000" />
       <workItem from="1571163435343" duration="325000" />
-      <workItem from="1571163778103" duration="5955000" />
+      <workItem from="1571163778103" duration="6832000" />
     </task>
     <servers />
   </component>

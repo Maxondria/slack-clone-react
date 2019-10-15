@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import firebase from "../../firebase/firebase";
 import { connect } from "react-redux";
 import { Icon, Menu, Modal, Form, Input, Button } from "semantic-ui-react";
+import ModalSpinner from "../ModalSpinner";
 
 class Channels extends Component {
   state = {
     channels: [],
+    isSaving: false,
     channelname: "",
     channeldetail: "",
     channelsRef: firebase.database().ref("channels"),
@@ -37,6 +39,7 @@ class Channels extends Component {
     const { displayName, photoURL } = this.props.currentUser;
 
     try {
+      this.setState({ isSaving: true });
       const id = channelsRef.push().key;
 
       const newChannel = {
@@ -50,15 +53,19 @@ class Channels extends Component {
       };
 
       await channelsRef.child(id).update(newChannel);
-      this.setState({ channelname: "", channeldetail: "", modal: false });
-      console.log("channel Added");
+      this.setState({
+        channelname: "",
+        channeldetail: "",
+        modal: false,
+        isSaving: false
+      });
     } catch (e) {
       console.log(e);
     }
   };
 
   render() {
-    const { channels, modal } = this.state;
+    const { channels, modal, isSaving } = this.state;
     return (
       <>
         <Menu.Menu style={{ paddingBottom: "2em" }}>
@@ -76,35 +83,44 @@ class Channels extends Component {
         <Modal basic open={modal} onClose={this.onCloseModal}>
           <Modal.Header>Create a channel</Modal.Header>
           <Modal.Content>
-            <Form onSubmit={this.handleSubmit}>
-              <Form.Field>
-                <Input
-                  fluid
-                  label="Channel Name"
-                  name="channelname"
-                  onChange={this.handleOnChange}
-                />
-              </Form.Field>
+            {isSaving ? (
+              <ModalSpinner />
+            ) : (
+              <Form onSubmit={this.handleSubmit}>
+                <Form.Field>
+                  <Input
+                    fluid
+                    label="Channel Name"
+                    name="channelname"
+                    onChange={this.handleOnChange}
+                  />
+                </Form.Field>
 
-              <Form.Field>
-                <Input
-                  fluid
-                  label="About Channel"
-                  name="channeldetail"
-                  onChange={this.handleOnChange}
-                />
-              </Form.Field>
-            </Form>
+                <Form.Field>
+                  <Input
+                    fluid
+                    label="About Channel"
+                    name="channeldetail"
+                    onChange={this.handleOnChange}
+                  />
+                </Form.Field>
+              </Form>
+            )}
           </Modal.Content>
 
           <Modal.Actions>
-            <Button color="green" inverted onClick={this.handleSubmit}>
-              <Icon name="checkmark" /> Add
-            </Button>
-
-            <Button color="red" inverted onClick={this.onCloseModal}>
-              <Icon name="remove" /> Cancel
-            </Button>
+            {isSaving ? (
+              ""
+            ) : (
+              <>
+                <Button color="green" inverted onClick={this.handleSubmit}>
+                  <Icon name="checkmark" /> Add
+                </Button>
+                <Button color="red" inverted onClick={this.onCloseModal}>
+                  <Icon name="remove" /> Cancel
+                </Button>
+              </>
+            )}
           </Modal.Actions>
         </Modal>
       </>
