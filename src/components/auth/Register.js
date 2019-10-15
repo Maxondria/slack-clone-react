@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import firebase from "../../firebase/firebase";
+import md5 from "md5";
 import {
   Header,
   Button,
@@ -19,15 +20,31 @@ const Register = () => {
     password: "",
     passwordconfirm: "",
     loading: false,
-    errors: []
+    errors: [],
+    usersRef: firebase.database().ref("users")
   });
 
-  const { username, email, password, passwordconfirm, errors, loading } = state;
+  const {
+    username,
+    email,
+    password,
+    passwordconfirm,
+    errors,
+    loading,
+    usersRef
+  } = state;
 
   const errorSetter = error => {
     setState({
       ...state,
       errors: [{ message: error }]
+    });
+  };
+
+  const saveUser = ({ user: { uid, displayName, photoURL } }) => {
+    return usersRef.child(uid).set({
+      name: displayName,
+      avatar: photoURL
     });
   };
 
@@ -82,10 +99,28 @@ const Register = () => {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then(user => {
-          //stop loading
-          setState({ ...state, loading: false });
-          console.log(user);
+        .then(createdUser => {
+          createdUser.user
+            .updateProfile({
+              displayName: username,
+              photoURL: `http://gravatar.com/avatar/${md5(
+                createdUser.user.email
+              )}?d=identicon`
+            })
+            .then(() => {
+              return saveUser(createdUser).then(() => {
+                setState({ ...state, loading: false });
+                console.log("User Saved");
+              });
+            })
+            .catch(error => {
+              const { message } = error;
+              setState({
+                ...state,
+                errors: [{ message }],
+                loading: false
+              });
+            });
         })
         .catch(error => {
           const { message } = error;
@@ -101,7 +136,7 @@ const Register = () => {
   return (
     <Grid textAlign="center" verticalAlign="middle" className="app">
       <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as="h2" icon color="orange" textAlign="center">
+        <Header as="h1" icon color="orange" textAlign="center">
           <Icon name="puzzle piece" color="orange" />
           Register for WorkChat
         </Header>
