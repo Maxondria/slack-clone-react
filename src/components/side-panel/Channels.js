@@ -7,23 +7,47 @@ import ModalSpinner from "../ModalSpinner";
 
 class Channels extends Component {
   state = {
+    activeChannel: "",
     channels: [],
     isSaving: false,
     channelname: "",
     channeldetail: "",
     channelsRef: firebase.database().ref("channels"),
-    modal: false
+    modal: false,
+    firstLoad: true
   };
 
   componentDidMount() {
     this.addListerners();
   }
 
+  componentWillUnmount() {
+    this.removeListeners();
+  }
+
+  removeListeners = () => {
+    this.state.channelsRef.off();
+  };
+
+  setFirstChannel = () => {
+    if (this.state.firstLoad && this.state.channels.length > 0) {
+      const firstChannel = this.state.channels[0];
+
+      this.props.setCurrentChannel(firstChannel);
+      this.setActiveChannel(firstChannel);
+    }
+    this.setState({ firstLoad: false });
+  };
+
+  setActiveChannel = channel => {
+    this.setState({ activeChannel: channel.id });
+  };
+
   addListerners = () => {
     let loadedChannels = [];
     this.state.channelsRef.on("child_added", snapshot => {
       loadedChannels.push(snapshot.val());
-      this.setState({ channels: loadedChannels });
+      this.setState({ channels: loadedChannels }, () => this.setFirstChannel());
     });
   };
 
@@ -35,12 +59,14 @@ class Channels extends Component {
         onClick={() => this.changeChannel(channel)}
         name={channel.name}
         style={{ opacity: 0.7 }}
+        active={channel.id === this.state.activeChannel}
       >
         #{channel.name}
       </Menu.Item>
     ));
 
   changeChannel = channel => {
+    this.setActiveChannel(channel);
     this.props.setCurrentChannel(channel);
   };
 
