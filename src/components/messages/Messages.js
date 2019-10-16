@@ -6,7 +6,12 @@ import MessagesHeader from "./MessagesHeader";
 import MessageForm from "./MessageForm";
 
 class Messages extends React.Component {
+  state = {
+    messagesRef: firebase.database().ref("messages")
+  };
+
   render() {
+    const { messagesRef } = this.state;
     return (
       <React.Fragment>
         <MessagesHeader />
@@ -15,7 +20,7 @@ class Messages extends React.Component {
           <Comment.Group className="messages">{/* Messages */}</Comment.Group>
         </Segment>
 
-        <MessageForm />
+        <MessageForm messagesRef={messagesRef} />
       </React.Fragment>
     );
   }
