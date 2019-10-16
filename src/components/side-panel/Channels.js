@@ -2,10 +2,13 @@ import React, { Component } from "react";
 import firebase from "../../firebase/firebase";
 import { connect } from "react-redux";
 import { setCurrentChannel } from "../../redux/actions";
+import UserAndChannelContext from "../../context/UserAndChannel";
 import { Icon, Menu, Modal, Form, Input, Button } from "semantic-ui-react";
 import ModalSpinner from "../ModalSpinner";
 
 class Channels extends Component {
+  static contextType = UserAndChannelContext;
+
   state = {
     activeChannel: "",
     channels: [],
@@ -92,7 +95,7 @@ class Channels extends Component {
 
   saveChannel = async () => {
     const { channeldetail, channelname, channelsRef } = this.state;
-    const { displayName, photoURL } = this.props.currentUser;
+    const { displayName, photoURL } = this.context.user;
 
     try {
       this.setState({ isSaving: true });
@@ -185,11 +188,7 @@ class Channels extends Component {
   }
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
-});
-
 export default connect(
-  mapStateToProps,
+  undefined,
   { setCurrentChannel }
 )(Channels);

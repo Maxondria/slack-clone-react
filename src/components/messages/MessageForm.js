@@ -1,13 +1,15 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Button, Input, Segment } from "semantic-ui-react";
 import firebase from "../../firebase/firebase";
+import UserAndChannelContext from "../../context/UserAndChannel";
 
 class MessageForm extends React.Component {
+  static contextType = UserAndChannelContext;
+
   state = {
     messagesRef: this.props.messagesRef,
     message: "",
-    user: this.props.currentUser,
+    user: this.context.user,
     loading: false,
     errors: []
   };
@@ -39,7 +41,7 @@ class MessageForm extends React.Component {
         this.setState({ loading: true, errors: [] });
 
         await messagesRef
-          .child(this.props.currentChannel.id)
+          .child(this.context.channel.id)
           .push()
           .set(this.createMessage());
 
@@ -94,12 +96,4 @@ class MessageForm extends React.Component {
   }
 }
 
-const mapStateToProps = ({
-  channel: { currentChannel },
-  user: { currentUser }
-}) => ({
-  currentChannel,
-  currentUser
-});
-
-export default connect(mapStateToProps)(MessageForm);
+export default MessageForm;
