@@ -69,7 +69,7 @@ class Messages extends React.Component {
           </Comment.Group>
         </Segment>
 
-        <MessageForm messagesRef={messagesRef} />
+        {this.context.channel && <MessageForm messagesRef={messagesRef} />}
       </React.Fragment>
     );
   }
