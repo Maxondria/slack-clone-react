@@ -4,6 +4,7 @@ import FileModal from "./FileModal";
 import uuidv4 from "uuid/v4";
 import firebase from "../../firebase/firebase";
 import UserAndChannelContext from "../../context/UserAndChannel";
+import ProgressBar from "./ProgressBar";
 
 class MessageForm extends React.Component {
   static contextType = UserAndChannelContext;
@@ -32,7 +33,7 @@ class MessageForm extends React.Component {
 
       this.setState({
         errors: [],
-        uploadState: "done",
+        uploadState: "",
         uploadTask: null,
         percentUploaded: 0
       });
@@ -137,7 +138,14 @@ class MessageForm extends React.Component {
   };
 
   render() {
-    const { errors, message, loading, modal } = this.state;
+    const {
+      errors,
+      message,
+      loading,
+      modal,
+      uploadState,
+      percentUploaded
+    } = this.state;
     return (
       <Segment className="message__form">
         <Input
@@ -168,18 +176,22 @@ class MessageForm extends React.Component {
           />
           <Button
             color="teal"
+            disabled={uploadState === "uploading"}
             content="Upload Media"
             labelPosition="right"
             icon="cloud upload"
             onClick={this.openModal}
           />
-
-          <FileModal
-            modal={modal}
-            closeModal={this.closeModal}
-            uploadFile={this.uploadFile}
-          />
         </Button.Group>
+        <FileModal
+          modal={modal}
+          closeModal={this.closeModal}
+          uploadFile={this.uploadFile}
+        />
+        <ProgressBar
+          uploadState={uploadState}
+          percentUploaded={percentUploaded}
+        />
       </Segment>
     );
   }
