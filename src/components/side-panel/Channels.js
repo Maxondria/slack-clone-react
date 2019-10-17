@@ -127,7 +127,7 @@ class Channels extends Component {
     const { channels, modal, isSaving } = this.state;
     return (
       <>
-        <Menu.Menu style={{ paddingBottom: "2em" }}>
+        <Menu.Menu className="menu">
           <Menu.Item>
             <span>
               <Icon name="exchange" />
