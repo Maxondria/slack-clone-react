@@ -7,7 +7,8 @@ class MessagesHeader extends React.Component {
       channelName,
       uniqueUsers,
       handleSearchChange,
-      searchLoading
+      searchLoading,
+      isChannelPrivate
     } = this.props;
 
     return (
@@ -16,7 +17,9 @@ class MessagesHeader extends React.Component {
         <Header fluid="true" as="h2" floated="left" style={{ marginBottom: 0 }}>
           <span>
             {channelName}{" "}
-            <Icon name="star outline" color="black" size="small" />
+            {!isChannelPrivate && (
+              <Icon name="star outline" color="black" size="small" />
+            )}
           </span>
           <Header.Subheader>{uniqueUsers}</Header.Subheader>
         </Header>

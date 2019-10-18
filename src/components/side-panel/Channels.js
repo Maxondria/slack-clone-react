@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import firebase from "../../firebase/firebase";
 import { connect } from "react-redux";
-import { setCurrentChannel } from "../../redux/actions";
+import { setCurrentChannel, setPrivateChannel } from "../../redux/actions";
 import UserAndChannelContext from "../../context/UserAndChannel";
 import { Icon, Menu, Modal, Form, Input, Button } from "semantic-ui-react";
 import ModalSpinner from "../ModalSpinner";
@@ -36,8 +36,7 @@ class Channels extends Component {
     if (this.state.firstLoad && this.state.channels.length > 0) {
       const firstChannel = this.state.channels[0];
 
-      this.props.setCurrentChannel(firstChannel);
-      this.setActiveChannel(firstChannel);
+      this.changeChannel(firstChannel);
     }
     this.setState({ firstLoad: false });
   };
@@ -71,6 +70,7 @@ class Channels extends Component {
   changeChannel = channel => {
     this.setActiveChannel(channel);
     this.props.setCurrentChannel(channel);
+    this.props.setPrivateChannel(false);
   };
 
   onCloseModal = () => this.setState({ modal: false });
@@ -190,5 +190,5 @@ class Channels extends Component {
 
 export default connect(
   undefined,
-  { setCurrentChannel }
+  { setCurrentChannel, setPrivateChannel }
 )(Channels);

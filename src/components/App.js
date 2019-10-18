@@ -9,8 +9,8 @@ import MetaPanel from "./meta-panel/MetaPanel";
 import Messages from "./messages/Messages";
 import UserAndChannelContext from "../context/UserAndChannel";
 
-const App = ({ channel, user }) => (
-  <UserAndChannelContext.Provider value={{ channel, user }}>
+const App = ({ channel, user, isChannelPrivate }) => (
+  <UserAndChannelContext.Provider value={{ channel, user, isChannelPrivate }}>
     <Grid columns="equal" className="app" style={{ background: "#eee" }}>
       <ColorPanel />
       <SidePanel />
@@ -27,11 +27,12 @@ const App = ({ channel, user }) => (
 );
 
 const mapStateToProps = ({
-  channel: { currentChannel },
+  channel: { currentChannel, isPrivateChannel },
   user: { currentUser }
 }) => ({
   channel: currentChannel,
-  user: currentUser
+  user: currentUser,
+  isChannelPrivate: isPrivateChannel
 });
 
 export default connect(mapStateToProps)(App);

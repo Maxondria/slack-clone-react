@@ -19,7 +19,8 @@ class MessageForm extends React.Component {
     user: this.context.user,
     loading: false,
     errors: [],
-    modal: false
+    modal: false,
+    isChannelPrivate: this.context.isChannelPrivate
   };
 
   sendFileMessage = async downloadURL => {
@@ -50,8 +51,13 @@ class MessageForm extends React.Component {
 
   closeModal = () => this.setState({ modal: false });
 
+  getPathName = () =>
+    this.state.isChannelPrivate
+      ? `chat/private-${this.context.channel.id}`
+      : `chat/public`;
+
   uploadFile = (file, metadata) => {
-    const filePath = `chat/public/${uuidv4()}.jpg`;
+    const filePath = `${this.getPathName()}/${uuidv4()}.jpg`;
 
     this.setState(
       {

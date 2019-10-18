@@ -4,6 +4,7 @@ export default {
     isLoading: true
   },
   channel: {
-    currentChannel: null
+    currentChannel: null,
+    isPrivateChannel: false
   }
 };

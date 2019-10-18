@@ -2,11 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb7b331e-92a9-4a7b-8e8e-3ec940b17162" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/side-panel/DirectMessages.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/messages/MessageForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/messages/MessageForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/messages/Messages.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/messages/Messages.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/messages/MessagesHeader.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/messages/MessagesHeader.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/side-panel/Channels.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/side-panel/Channels.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/side-panel/SidePanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/side-panel/SidePanel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/side-panel/DirectMessages.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/side-panel/DirectMessages.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/actions/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/constants/actionTypes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/constants/actionTypes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/reducers/channelReducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/reducers/channelReducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/redux/store/initialState.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/store/initialState.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

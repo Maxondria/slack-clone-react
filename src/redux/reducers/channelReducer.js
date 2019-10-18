@@ -6,6 +6,11 @@ export default (state = initialState.channel, action) => {
     [actionTypes.SET_CURRENT_CHANNEL]: () => ({
       ...state,
       currentChannel: action.payload.currentChannel
+    }),
+
+    [actionTypes.SET_PRIVATE_CHANNEL]: () => ({
+      ...state,
+      isPrivateChannel: action.payload.isPrivateChannel
     })
   };
 
