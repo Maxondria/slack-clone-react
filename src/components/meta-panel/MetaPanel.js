@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
-import { Segment, Accordion, Header, Icon } from "semantic-ui-react";
+import { Segment, Accordion, Header, Icon, Image } from "semantic-ui-react";
 import UserAndChannelContext from "../../context/UserAndChannel";
 
 const MetaPanel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { isChannelPrivate } = useContext(UserAndChannelContext);
+  const { isChannelPrivate, channel } = useContext(UserAndChannelContext);
 
   const showItem = (event, titleProps) => {
     const { index } = titleProps;
@@ -14,7 +14,7 @@ const MetaPanel = () => {
   return isChannelPrivate ? null : (
     <Segment>
       <Header as="h3" attached="top">
-        About # Channel
+        About # {channel.name}
       </Header>
       <Accordion styled attached="true">
         <Accordion.Title
@@ -24,11 +24,11 @@ const MetaPanel = () => {
         >
           <Icon name="dropdown" />
           <Icon name="info" />
-          Channel Details
+          Details
         </Accordion.Title>
 
         <Accordion.Content active={activeIndex === 0}>
-          Details
+          {channel.details}
         </Accordion.Content>
 
         <Accordion.Title
@@ -56,7 +56,10 @@ const MetaPanel = () => {
         </Accordion.Title>
 
         <Accordion.Content active={activeIndex === 2}>
-          Creator
+          <Header as="h3">
+            <Image circular src={channel.createdBy.avatar} />
+            {channel.createdBy.name}
+          </Header>
         </Accordion.Content>
       </Accordion>
     </Segment>
