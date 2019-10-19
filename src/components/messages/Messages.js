@@ -50,10 +50,7 @@ class Messages extends React.Component {
   };
 
   componentWillUnmount() {
-    const { messagesRef, privateMessagesRef, usersRef } = this.state;
-    messagesRef.off();
-    privateMessagesRef.off();
-    usersRef.off();
+    this.getMessagesRef().off();
   }
 
   handleStar = () => {
