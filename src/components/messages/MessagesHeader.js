@@ -1,24 +1,34 @@
 import React from "react";
 import { Header, Segment, Input, Icon } from "semantic-ui-react";
+import UserAndChannelContext from "../../context/UserAndChannel";
 
 class MessagesHeader extends React.Component {
+  static contextType = UserAndChannelContext;
+
   render() {
     const {
       channelName,
       uniqueUsers,
       handleSearchChange,
       searchLoading,
-      isChannelPrivate
+      isChannelPrivate,
+      handleStar,
+      isChannelStarred
     } = this.props;
 
-    return (
+    return this.context.channel ? (
       <Segment clearing>
         {/* Channel Title */}
         <Header fluid="true" as="h2" floated="left" style={{ marginBottom: 0 }}>
           <span>
             {channelName}{" "}
             {!isChannelPrivate && (
-              <Icon name="star outline" color="black" size="small" />
+              <Icon
+                name={isChannelStarred ? "star" : "star outline"}
+                color={isChannelStarred ? "yellow" : "black"}
+                size="small"
+                onClick={handleStar}
+              />
             )}
           </span>
           <Header.Subheader>{uniqueUsers}</Header.Subheader>
@@ -36,6 +46,8 @@ class MessagesHeader extends React.Component {
           />
         </Header>
       </Segment>
+    ) : (
+      ""
     );
   }
 }
