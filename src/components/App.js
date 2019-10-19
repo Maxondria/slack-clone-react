@@ -19,9 +19,7 @@ const App = ({ channel, user, isChannelPrivate }) => (
         <Messages key={channel && channel.id} />
       </Grid.Column>
 
-      <Grid.Column width={4}>
-        <MetaPanel />
-      </Grid.Column>
+      <Grid.Column width={4}>{channel && <MetaPanel />}</Grid.Column>
     </Grid>
   </UserAndChannelContext.Provider>
 );
