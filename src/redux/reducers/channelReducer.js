@@ -11,6 +11,11 @@ export default (state = initialState.channel, action) => {
     [actionTypes.SET_PRIVATE_CHANNEL]: () => ({
       ...state,
       isPrivateChannel: action.payload.isPrivateChannel
+    }),
+
+    [actionTypes.SET_USER_POSTS]: () => ({
+      ...state,
+      userPosts: action.payload.userPosts
     })
   };
 

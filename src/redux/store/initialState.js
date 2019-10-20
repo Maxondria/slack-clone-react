@@ -5,6 +5,7 @@ export default {
   },
   channel: {
     currentChannel: null,
-    isPrivateChannel: false
+    isPrivateChannel: false,
+    userPosts: null
   }
 };

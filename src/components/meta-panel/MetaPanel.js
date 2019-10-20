@@ -1,15 +1,42 @@
 import React, { useState, useContext } from "react";
-import { Segment, Accordion, Header, Icon, Image } from "semantic-ui-react";
+import {
+  Segment,
+  Accordion,
+  Header,
+  Icon,
+  Image,
+  List
+} from "semantic-ui-react";
 import UserAndChannelContext from "../../context/UserAndChannel";
 
 const MetaPanel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const { isChannelPrivate, channel } = useContext(UserAndChannelContext);
+
+  const { isChannelPrivate, channel, userPosts } = useContext(
+    UserAndChannelContext
+  );
 
   const showItem = (event, titleProps) => {
     const { index } = titleProps;
     setActiveIndex(() => (activeIndex === index ? -1 : index));
   };
+
+  const formatCount = count =>
+    count > 1 || count === 0 ? `${count} posts` : `${count} post`;
+
+  const displayTopPosters = posts =>
+    Object.entries(posts)
+      .sort((b, a) => (b[1].count > a[1].count ? -1 : 1))
+      .map(([username, stats], i) => (
+        <List.Item key={i}>
+          <Image avatar src={stats.avatar} />
+          <List.Content>
+            <List.Header as="a">{username}</List.Header>
+            <List.Description>{formatCount(stats.count)}</List.Description>
+          </List.Content>
+        </List.Item>
+      ))
+      .slice(0, 5);
 
   return isChannelPrivate ? null : (
     <Segment>
@@ -42,7 +69,7 @@ const MetaPanel = () => {
         </Accordion.Title>
 
         <Accordion.Content active={activeIndex === 1}>
-          Posters
+          <List>{userPosts && displayTopPosters(userPosts)}</List>
         </Accordion.Content>
 
         <Accordion.Title
