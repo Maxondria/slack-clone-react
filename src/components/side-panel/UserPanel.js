@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import {
   Grid,
   Header,
@@ -17,19 +17,40 @@ import UserAndChannelContext from "../../context/UserAndChannel";
 const UserPanel = () => {
   const [modal, setModal] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-  const avatarRef = useRef(null);
   const [croppedImage, setCroppedImage] = useState("");
   const [blob, setBlob] = useState("");
+  const [storageRef] = useState(firebase.storage().ref());
+  const [loggedInUser] = useState(firebase.auth().currentUser);
+  const [usersRef] = useState(firebase.database().ref("users"));
+  const [uploadedImageURL, setUploadedImageURL] = useState("");
+
+  const avatarRef = useRef(null);
+
   const { user, colors } = useContext(UserAndChannelContext);
 
-  const handleSignOut = () => {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        console.log("Signed Out");
-      });
-  };
+  useEffect(() => {
+    if (!!uploadedImageURL) {
+      //update current user profile
+      loggedInUser
+        .updateProfile({
+          photoURL: uploadedImageURL
+        })
+        .then(() => {
+          //update our database
+          usersRef
+            .child(loggedInUser.uid)
+            .update({
+              avatar: uploadedImageURL
+            })
+            .then(() => {
+              console.log("User Updated");
+              handleModal();
+            })
+            .catch(e => console.log(e.message));
+        })
+        .catch(e => console.log(e.message));
+    }
+  }, [uploadedImageURL, loggedInUser, usersRef]);
 
   const handleModal = () => setModal(prevState => !prevState);
 
@@ -50,6 +71,30 @@ const UserPanel = () => {
         setBlob(blob);
       });
     }
+  };
+
+  const uploadCroppedImage = async () => {
+    const metadata = { contentType: "image/jpeg" };
+
+    try {
+      const snapshot = await storageRef
+        .child(`avatars/user-${loggedInUser.uid}`)
+        .put(blob, metadata);
+
+      const downloadURL = await snapshot.ref.getDownloadURL();
+      setUploadedImageURL(downloadURL);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const handleSignOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log("Signed Out");
+      });
   };
 
   const dropDownOptions = () => [
@@ -141,7 +186,7 @@ const UserPanel = () => {
 
           <Modal.Actions>
             {croppedImage && (
-              <Button color="green" inverted>
+              <Button color="green" inverted onClick={uploadCroppedImage}>
                 <Icon name="save" /> Change Avatar
               </Button>
             )}
