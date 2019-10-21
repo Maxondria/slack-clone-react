@@ -11,6 +11,7 @@ class MessageForm extends React.Component {
 
   state = {
     storageRef: firebase.storage().ref(),
+    typingRef: firebase.database().ref("typing"),
     messagesRef: this.props.messagesRef,
     percentUploaded: 0,
     message: "",
@@ -50,6 +51,16 @@ class MessageForm extends React.Component {
   openModal = () => this.setState({ modal: true });
 
   closeModal = () => this.setState({ modal: false });
+
+  handleKeyDown = async () => {
+    const { message, typingRef } = this.state;
+    const { channel, user } = this.context;
+    if (message) {
+      await typingRef.child(`${channel.id}/${user.uid}`).set(user.displayName);
+    } else {
+      await typingRef.child(`${channel.id}/${user.uid}`).remove();
+    }
+  };
 
   getPathName = () =>
     this.state.isChannelPrivate
@@ -123,7 +134,8 @@ class MessageForm extends React.Component {
   };
 
   sendMessage = async () => {
-    const { message, messagesRef } = this.state;
+    const { message, messagesRef, typingRef } = this.state;
+    const { channel, user } = this.context;
 
     try {
       if (message) {
@@ -137,6 +149,7 @@ class MessageForm extends React.Component {
         this.setState({ loading: false, message: "" });
       } else {
         this.setState({ errors: [{ message: "Add a message" }] });
+        await typingRef.child(`${channel.id}/${user.uid}`).remove();
       }
     } catch (error) {
       this.setState({ errors: [{ message: error.message }], loading: false });
@@ -158,6 +171,7 @@ class MessageForm extends React.Component {
           fluid
           name="message"
           value={message}
+          onKeyDown={this.handleKeyDown}
           onChange={this.handleOnChange}
           style={{ marginBottom: "0.7em" }}
           label={<Button icon={"add"} />}

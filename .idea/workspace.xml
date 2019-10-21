@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="eb7b331e-92a9-4a7b-8e8e-3ec940b17162" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/side-panel/UserPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/side-panel/UserPanel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/messages/MessageForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/messages/MessageForm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/side-panel/Channels.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/side-panel/Channels.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -79,7 +80,7 @@
       <workItem from="1571487663451" duration="15426000" />
       <workItem from="1571561363179" duration="16671000" />
       <workItem from="1571647281752" duration="7947000" />
-      <workItem from="1571661551749" duration="1346000" />
+      <workItem from="1571661551749" duration="6043000" />
     </task>
     <servers />
   </component>
