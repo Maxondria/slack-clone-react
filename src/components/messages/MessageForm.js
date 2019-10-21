@@ -147,6 +147,7 @@ class MessageForm extends React.Component {
           .set(this.createMessage());
 
         this.setState({ loading: false, message: "" });
+        await typingRef.child(`${channel.id}/${user.uid}`).remove();
       } else {
         this.setState({ errors: [{ message: "Add a message" }] });
         await typingRef.child(`${channel.id}/${user.uid}`).remove();
