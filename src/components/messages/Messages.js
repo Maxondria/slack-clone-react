@@ -10,6 +10,7 @@ import UserAndChannelContext from "../../context/UserAndChannel";
 import MessagesHeader from "./MessagesHeader";
 import MessageForm from "./MessageForm";
 import Typing from "./Typing";
+import Skeleton from "./Skeleton";
 
 class Messages extends React.Component {
   static contextType = UserAndChannelContext;
@@ -250,6 +251,15 @@ class Messages extends React.Component {
       </div>
     ));
 
+  displayMessageSkeleton = loading =>
+    loading ? (
+      <>
+        {[...Array(10)].map((_, i) => (
+          <Skeleton key={i} />
+        ))}
+      </>
+    ) : null;
+
   render() {
     const {
       messages,
@@ -259,7 +269,8 @@ class Messages extends React.Component {
       searchLoading,
       isChannelPrivate,
       isChannelStarred,
-      typingUsers
+      typingUsers,
+      messagesLoading
     } = this.state;
     return (
       <React.Fragment>
@@ -275,6 +286,7 @@ class Messages extends React.Component {
 
         <Segment>
           <Comment.Group className="messages">
+            {this.displayMessageSkeleton(messagesLoading)}
             {searchTerm
               ? this.displayMessages(searchResults)
               : this.displayMessages(messages)}
